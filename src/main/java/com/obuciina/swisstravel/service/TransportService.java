@@ -2,6 +2,7 @@ package com.obuciina.swisstravel.service;
 
 import com.obuciina.swisstravel.exception.NotFoundException;
 import com.obuciina.swisstravel.model.dto.ConnectionDTO;
+import com.obuciina.swisstravel.model.dto.DurationDTO;
 import com.obuciina.swisstravel.model.dto.RelationDTO;
 import com.obuciina.swisstravel.util.DurationUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -35,7 +37,12 @@ public class TransportService {
             throw new NotFoundException("Unable to found relation between two places.");
         }
 
-        return durationUtil.calculateAverageTime(connections);
+        List<String> durations = connections.getConnections()
+                .stream()
+                .map(DurationDTO::getDuration)
+                .toList();
+
+        return durationUtil.getAverageDuration(durations);
     }
 
 }
