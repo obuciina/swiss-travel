@@ -7,5 +7,5 @@ import java.util.ArrayList;
 @Data
 public class ConnectionDTO {
 
-    private ArrayList<RelationDTO> connections;
+    private ArrayList<DurationDTO> connections;
 }

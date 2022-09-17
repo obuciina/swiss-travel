@@ -1,36 +1,41 @@
 package com.obuciina.swisstravel.service;
 
+import com.obuciina.swisstravel.exception.NotFoundException;
 import com.obuciina.swisstravel.model.dto.ConnectionDTO;
-import com.obuciina.swisstravel.model.dto.TravelDTO;
-import com.obuciina.swisstravel.util.TimeUtil;
+import com.obuciina.swisstravel.model.dto.RelationDTO;
+import com.obuciina.swisstravel.util.DurationUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class TransportService {
 
-    private final TimeUtil timeUtil;
+    @Value("${swiss.base-url}")
+    private String swissBaseUrl;
+    private final DurationUtil durationUtil;
 
-    public TransportService(TimeUtil timeUtil) {
-        this.timeUtil = timeUtil;
+    public TransportService(DurationUtil durationUtil) {
+        this.durationUtil = durationUtil;
     }
 
-    public ArrayList<TravelDTO> calculateTime(String from, String to) {
-        String url = "http://transport.opendata.ch/v1/connections?from={from}&to={to}";
-
+    public String findConnections(RelationDTO relationDTO) {
+        String url = swissBaseUrl + "/connections?from={from}&to={to}";
 
         RestTemplate restTemplate = new RestTemplate();
         Map<String, String> uri = new HashMap<>();
-        uri.put("from", from);
-        uri.put("to", to);
+        uri.put("from", relationDTO.getStart());
+        uri.put("to", relationDTO.getDestination());
 
-        ConnectionDTO response = restTemplate.getForObject(url, ConnectionDTO.class, uri);
-        ArrayList<TravelDTO> travelInfo = timeUtil.mapToTravel(response);
-        return travelInfo;
+        ConnectionDTO connections = restTemplate.getForObject(url, ConnectionDTO.class, uri);
+        if (connections == null) {
+            throw new NotFoundException("Unable to found relation between two places.");
+        }
+
+        return durationUtil.calculateAverageTime(connections);
     }
 
 }
