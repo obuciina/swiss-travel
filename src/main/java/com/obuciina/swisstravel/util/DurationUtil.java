@@ -7,9 +7,15 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class DurationUtil {
+
+
     public String getAverageDuration(List<String> durations) {
+        int seconds = timeToSeconds(durations);
+        return secondsToString(seconds / durations.size());
+    }
+
+    public int timeToSeconds(List<String> durations) {
         int seconds = 0;
-        int total;
         for (String duration : durations) {
             String[] days = duration.split("d");
             String[] time = days[1].split(":");
@@ -18,8 +24,7 @@ public class DurationUtil {
             seconds += ((time.length >= 2) ? Integer.parseInt(time[1]) : 0) * 60;
             seconds += ((time.length >= 3) ? Integer.parseInt(time[2]) : 0);
         }
-        total = seconds / durations.size();
-        return secondsToString(total);
+        return seconds;
     }
 
     private String secondsToString(int seconds) {
