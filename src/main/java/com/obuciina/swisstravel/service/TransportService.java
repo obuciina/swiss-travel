@@ -29,17 +29,17 @@ public class TransportService {
 
         RestTemplate restTemplate = new RestTemplate();
         Map<String, String> uri = new HashMap<>();
-        uri.put("from", relationDTO.getStart());
-        uri.put("to", relationDTO.getDestination());
+        uri.put("from", relationDTO.start());
+        uri.put("to", relationDTO.destination());
 
         ConnectionDTO connections = restTemplate.getForObject(url, ConnectionDTO.class, uri);
         if (connections == null) {
             throw new NotFoundException("Unable to found relation between two places.");
         }
 
-        List<String> durations = connections.getConnections()
+        List<String> durations = connections.connections()
                 .stream()
-                .map(DurationDTO::getDuration)
+                .map(DurationDTO::duration)
                 .toList();
 
         return durationUtil.getAverageDuration(durations);
