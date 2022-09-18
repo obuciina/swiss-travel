@@ -49,7 +49,8 @@ public class TransportService {
                 .toList();
 
         if (durations.isEmpty()) {
-            throw new NotFoundException("Unable to found relation between provided locations.");
+            throw new NotFoundException("Unable to found duration between "
+                    + relationDTO.start() + " and " + relationDTO.destination());
         }
 
         return durationUtil.getAverageDuration(durations);

@@ -1,5 +1,6 @@
 package com.obuciina.swisstravel.util;
 
+import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,19 +22,19 @@ public class DurationUtilTest {
 
     @Test
     void testGetAverageDurationOne() {
+        //given
         List<String> oneDuration = List.of("00d00:49:00");
-        durationUtil.getAverageDuration(oneDuration);
+        List<String> multipleDuration = Arrays.asList("00d00:49:00", "00d00:50:00", "00d00:30:00", "01d00:40:00");
+        SwissResponseDTO expectedOne = new SwissResponseDTO(0, 0, 49, 0);
+        SwissResponseDTO expectedMultiple = new SwissResponseDTO(0, 6, 42, 15);
 
-        assertEquals("Average time is: 0 days, 0 hours, 49 minutes and 0 seconds.",
-                durationUtil.getAverageDuration(oneDuration));
+        //when
+        durationUtil.getAverageDuration(oneDuration);
+        durationUtil.getAverageDuration(multipleDuration);
+
+        //then
+        assertEquals(expectedOne, durationUtil.getAverageDuration(oneDuration));
+        assertEquals(expectedMultiple, durationUtil.getAverageDuration(multipleDuration));
     }
 
-    @Test
-    void testGetAverageDurationMultiple() {
-        List<String> oneDuration = Arrays.asList("00d00:49:00", "00d00:50:00", "00d00:30:00", "01d00:40:00");
-        durationUtil.getAverageDuration(oneDuration);
-
-        assertEquals("Average time is: 0 days, 6 hours, 42 minutes and 15 seconds.",
-                durationUtil.getAverageDuration(oneDuration));
-    }
 }
