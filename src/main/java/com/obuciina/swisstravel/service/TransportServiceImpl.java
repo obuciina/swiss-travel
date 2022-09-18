@@ -33,6 +33,9 @@ public class TransportServiceImpl implements TransportService {
         this.durationUtil = durationUtil;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public SwissResponseDTO findConnections(RelationDTO relationDTO) {
         logger.info("Trying to find relation between {} and {}.", relationDTO.start(), relationDTO.destination());
         String url = swissBaseUrl + "/connections?from={from}&to={to}";

@@ -9,7 +9,7 @@ public interface DurationUtil {
     /**
      * Returns average time duration from provided duration list.
      *
-     * @param  durations  an absolute URL giving the base location of the image
+     * @param  durations  a list of durations
      * @return      the average time duration
      * @see         Duration
      */

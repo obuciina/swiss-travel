@@ -5,12 +5,13 @@ import com.obuciina.swisstravel.model.dto.RelationDTO;
 import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
 
 public interface TransportService {
+
     /**
-     * Returns average time duration from provided duration list.
+     * Call external API with requested locations and calculating average time duration
      *
-     * @param  durations  an absolute URL giving the base location of the image
-     * @return      the average time duration
-     * @see         Duration
+     * @param  findConnections  object that contains start and final location
+     * @return      locations and average time duration
+     * @see         SwissResponseDTO
      */
     SwissResponseDTO findConnections(RelationDTO findConnections);
 }
