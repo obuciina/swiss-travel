@@ -4,6 +4,7 @@ import com.obuciina.swisstravel.exception.NotFoundException;
 import com.obuciina.swisstravel.model.dto.ConnectionDTO;
 import com.obuciina.swisstravel.model.dto.DurationDTO;
 import com.obuciina.swisstravel.model.dto.RelationDTO;
+import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
 import com.obuciina.swisstravel.util.DurationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class TransportService {
         this.durationUtil = durationUtil;
     }
 
-    public String findConnections(RelationDTO relationDTO) {
+    public SwissResponseDTO findConnections(RelationDTO relationDTO) {
         logger.info("Trying to find duration between {} and {}.", relationDTO.start(), relationDTO.destination());
         String url = swissBaseUrl + "/connections?from={from}&to={to}";
 
@@ -46,6 +47,10 @@ public class TransportService {
                 .stream()
                 .map(DurationDTO::duration)
                 .toList();
+
+        if (durations.isEmpty()) {
+            throw new NotFoundException("Unable to found relation between provided locations.");
+        }
 
         return durationUtil.getAverageDuration(durations);
     }

@@ -3,6 +3,7 @@ package com.obuciina.swisstravel.controller;
 
 import com.obuciina.swisstravel.exception.NotFoundException;
 import com.obuciina.swisstravel.model.dto.RelationDTO;
+import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
 import com.obuciina.swisstravel.service.TransportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +34,7 @@ public class TransportController {
 
     @ApiOperation(value = "Find average time duration between to station",
             notes = "Provide name of start and final destination to get time duration",
-            response = String.class)
+            response = SwissResponseDTO.class)
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "Ok - Time duration is calculated"),
@@ -42,7 +43,7 @@ public class TransportController {
             }
     )
     @GetMapping("/connections")
-    public ResponseEntity<String> getDuration(@RequestBody @Valid RelationDTO relationDTO) {
+    public ResponseEntity<?> getDuration(@RequestBody @Valid RelationDTO relationDTO) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(transportService.findConnections(relationDTO));
         } catch (NotFoundException ex) {
