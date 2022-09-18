@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class DurationUtil {
 
-
     public String getAverageDuration(List<String> durations) {
         int seconds = timeToSeconds(durations);
         return secondsToString(seconds / durations.size());
