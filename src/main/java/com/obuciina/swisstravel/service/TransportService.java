@@ -1,6 +1,5 @@
 package com.obuciina.swisstravel.service;
 
-import com.obuciina.swisstravel.model.Duration;
 import com.obuciina.swisstravel.model.dto.RelationDTO;
 import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
 
