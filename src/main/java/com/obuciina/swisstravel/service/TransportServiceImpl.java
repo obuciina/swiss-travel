@@ -44,12 +44,10 @@ public class TransportServiceImpl implements TransportService {
 
         ConnectionDTO connections = restTemplate.getForObject(url, ConnectionDTO.class, uri);
         if (connections == null) {
-            logger.error("Unable to found connection for {} and {}",
-                    relationDTO.start(), relationDTO.destination());
+            logger.error("Unable to found connection for {} and {}", relationDTO.start(), relationDTO.destination());
             throw new NotFoundException("Unable to found connection.");
         } else if (connections.connections().isEmpty()) {
-            logger.error("Unable to found relation between {} and {}",
-                    relationDTO.start(), relationDTO.destination());
+            logger.error("Unable to found relation between {} and {}", relationDTO.start(), relationDTO.destination());
             throw new NotFoundException("Unable to found relation between provided locations.");
         }
 
