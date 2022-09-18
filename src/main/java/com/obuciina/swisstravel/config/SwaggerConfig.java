@@ -8,6 +8,8 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.ArrayList;
+
 @Configuration
 public class SwaggerConfig {
     @Bean
@@ -25,7 +27,7 @@ public class SwaggerConfig {
                 "Swiss Travel REST API",
                 "Overview of available REST APIs",
                 "1.0.0",
-                "", "", "", ""
+                "", null, "", "", new ArrayList<>()
         );
     }
 }

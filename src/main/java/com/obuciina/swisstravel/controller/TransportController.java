@@ -47,7 +47,7 @@ public class TransportController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(transportService.findConnections(relationDTO));
         } catch (NotFoundException ex) {
-            logger.error("Unable to find direct relation between {} and {}.", relationDTO.start(), relationDTO.destination());
+            logger.error("Unable to find relation between {} and {}.", relationDTO.start(), relationDTO.destination());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }

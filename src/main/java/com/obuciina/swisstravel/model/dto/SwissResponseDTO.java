@@ -1,4 +1,6 @@
 package com.obuciina.swisstravel.model.dto;
 
-public record SwissResponseDTO(long days, long hours, long minutes, long seconds) {
+import com.obuciina.swisstravel.model.Duration;
+
+public record SwissResponseDTO(String start, String destination, Duration duration) {
 }

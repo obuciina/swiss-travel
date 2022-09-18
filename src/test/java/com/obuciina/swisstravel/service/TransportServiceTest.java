@@ -1,10 +1,12 @@
 package com.obuciina.swisstravel.service;
 
+import com.obuciina.swisstravel.model.Point;
+import com.obuciina.swisstravel.model.Relation;
+import com.obuciina.swisstravel.model.Station;
 import com.obuciina.swisstravel.model.dto.ConnectionDTO;
-import com.obuciina.swisstravel.model.dto.DurationDTO;
 import com.obuciina.swisstravel.model.dto.RelationDTO;
 import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
-import com.obuciina.swisstravel.util.DurationUtil;
+import com.obuciina.swisstravel.util.DurationUtilImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -14,11 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 public class TransportServiceTest {
@@ -30,11 +30,11 @@ public class TransportServiceTest {
     RestTemplate restTemplate;
 
     @Autowired
-    DurationUtil durationUtil;
+    DurationUtilImpl durationUtil;
 
     @BeforeEach
     void setUp() {
-        transportService = new TransportService(durationUtil);
+        transportService = new TransportServiceImpl(durationUtil);
     }
 
     @Test
@@ -42,21 +42,24 @@ public class TransportServiceTest {
         //given
         RelationDTO relationDTO = new RelationDTO(any(), any());
         ConnectionDTO swissConnection = mockConnections();
-        when(restTemplate.getForObject(any(),any(), (Map<String, ?>) any())).thenReturn(swissConnection);
+        // when(restTemplate.getForObject(any(),any(), (Map<String, ?>) any())).thenReturn(swissConnection);
 
         SwissResponseDTO response = transportService.findConnections(relationDTO);
 
-        assertEquals(response.minutes(), 40);
+        assertEquals(response.duration().minutes(), 40);
     }
 
     private ConnectionDTO mockConnections() {
+        Station startStation = new Station("1", "Lausanne");
+        Station destinationStation = new Station("2", "Basel, Novartis Campus");
+        Point startPoint = new Point(startStation);
+        Point destinationPoint = new Point(destinationStation);
+        String durationOne = "00d:00:30:00";
+        String durationTwo = "00d:00:50:00";
 
-        DurationDTO durationOne = new DurationDTO("00d:00:30:00");
-        DurationDTO durationTwo = new DurationDTO("00d:00:50:00");
-
-        ArrayList<DurationDTO> connections = new ArrayList<>();
-        connections.add(durationOne);
-        connections.add(durationTwo);
+        ArrayList<Relation> connections = new ArrayList<>();
+        connections.add(new Relation(startPoint, destinationPoint, durationOne));
+        connections.add(new Relation(startPoint, destinationPoint, durationTwo));
 
         return new ConnectionDTO(connections);
     }

@@ -1,5 +1,6 @@
 package com.obuciina.swisstravel.util;
 
+import com.obuciina.swisstravel.model.Duration;
 import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ public class DurationUtilTest {
 
     @BeforeEach
     void setUp() {
-        durationUtil = new DurationUtil();
+        durationUtil = new DurationUtilImpl();
     }
 
     @Test
@@ -25,16 +26,18 @@ public class DurationUtilTest {
         //given
         List<String> oneDuration = List.of("00d00:49:00");
         List<String> multipleDuration = Arrays.asList("00d00:49:00", "00d00:50:00", "00d00:30:00", "01d00:40:00");
-        SwissResponseDTO expectedOne = new SwissResponseDTO(0, 0, 49, 0);
-        SwissResponseDTO expectedMultiple = new SwissResponseDTO(0, 6, 42, 15);
+        SwissResponseDTO expectedOne = new SwissResponseDTO("start","destination",
+                new Duration(0, 0, 49, 0));
+        SwissResponseDTO expectedMultiple = new SwissResponseDTO("start", "destination",
+                new Duration(0, 6, 42, 15));
 
         //when
         durationUtil.getAverageDuration(oneDuration);
         durationUtil.getAverageDuration(multipleDuration);
 
         //then
-        assertEquals(expectedOne, durationUtil.getAverageDuration(oneDuration));
-        assertEquals(expectedMultiple, durationUtil.getAverageDuration(multipleDuration));
+        assertEquals(expectedOne.duration(), durationUtil.getAverageDuration(oneDuration));
+        assertEquals(expectedMultiple.duration(), durationUtil.getAverageDuration(multipleDuration));
     }
 
 }
