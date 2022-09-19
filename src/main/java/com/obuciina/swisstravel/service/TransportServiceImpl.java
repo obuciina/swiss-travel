@@ -28,9 +28,11 @@ public class TransportServiceImpl implements TransportService {
     @Value("${swiss.base-url}")
     private String swissBaseUrl;
     private final DurationUtil durationUtil;
+    private final RestTemplate restTemplate;
 
-    public TransportServiceImpl(DurationUtil durationUtil) {
+    public TransportServiceImpl(DurationUtil durationUtil, RestTemplate restTemplate) {
         this.durationUtil = durationUtil;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -40,7 +42,6 @@ public class TransportServiceImpl implements TransportService {
         logger.info("Trying to find relation between {} and {}.", relationDTO.start(), relationDTO.destination());
         String url = swissBaseUrl + "/connections?from={from}&to={to}";
 
-        RestTemplate restTemplate = new RestTemplate();
         Map<String, String> uri = new HashMap<>();
         uri.put("from", relationDTO.start());
         uri.put("to", relationDTO.destination());

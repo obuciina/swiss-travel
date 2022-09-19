@@ -23,8 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TransportControllerTest {
 
-    private final String baseUrl = "http://localhost:8080/api/v1/connections";
-
+    private final String BASE_URL = "http://localhost:8080/api/v1/connections";
     @Autowired
     MockMvc mockMvc;
 
@@ -42,7 +41,7 @@ public class TransportControllerTest {
         String request = objectWriter.writeValueAsString(relationOne);
 
         //then
-        MvcResult result = mockMvc.perform(get(baseUrl).contentType(APPLICATION_JSON_UTF8).content(request))
+        MvcResult result = mockMvc.perform(get(BASE_URL).contentType(APPLICATION_JSON_UTF8).content(request))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -59,8 +58,22 @@ public class TransportControllerTest {
         String request = objectWriter.writeValueAsString(relationOne);
 
         //then
-        mockMvc.perform(get(baseUrl).contentType(APPLICATION_JSON_UTF8).content(request))
+        mockMvc.perform(get(BASE_URL).contentType(APPLICATION_JSON_UTF8).content(request))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testGetDurationClientError() throws Exception {
+        //given
+        RelationDTO relationOne = new RelationDTO("Lausanne", "");
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
+        String request = objectWriter.writeValueAsString(relationOne);
+
+        //then
+        mockMvc.perform(get(BASE_URL+"error").contentType(APPLICATION_JSON_UTF8).content(request))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isNotFound());
     }
 }
