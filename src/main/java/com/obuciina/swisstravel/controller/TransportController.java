@@ -1,7 +1,6 @@
 package com.obuciina.swisstravel.controller;
 
 
-import com.obuciina.swisstravel.model.dto.RelationDTO;
 import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
 import com.obuciina.swisstravel.service.TransportService;
 import io.swagger.annotations.Api;
@@ -12,15 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin
 @Api(value = "Swiss Transport API v1")
 public class TransportController {
 
@@ -41,10 +36,10 @@ public class TransportController {
                     @ApiResponse(code = 500, message = "Internal Server Error - An unexpected error occured")
             }
     )
-    @GetMapping("/connections")
-    public ResponseEntity<?> getDuration(@RequestBody @Valid RelationDTO relationDTO) {
-        logger.info("Start finding time duration between {} and {}", relationDTO.start(), relationDTO.destination());
-        return ResponseEntity.status(HttpStatus.OK).body(transportService.findConnections(relationDTO));
+    @GetMapping("/connections/{start}/{destination}")
+    public ResponseEntity<?> getDuration(@PathVariable String start, @PathVariable String destination) {
+        logger.info("Start finding time duration between {} and {}", start, destination);
+        return ResponseEntity.status(HttpStatus.OK).body(transportService.findConnections(start, destination));
     }
 
 }

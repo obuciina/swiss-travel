@@ -6,7 +6,6 @@ import com.obuciina.swisstravel.model.Point;
 import com.obuciina.swisstravel.model.Relation;
 import com.obuciina.swisstravel.model.Station;
 import com.obuciina.swisstravel.model.dto.ConnectionDTO;
-import com.obuciina.swisstravel.model.dto.RelationDTO;
 import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
 import com.obuciina.swisstravel.util.DurationUtil;
 import org.slf4j.Logger;
@@ -38,20 +37,20 @@ public class TransportServiceImpl implements TransportService {
     /**
      * {@inheritDoc}
      */
-    public SwissResponseDTO findConnections(RelationDTO relationDTO) {
-        logger.info("Trying to find relation between {} and {}.", relationDTO.start(), relationDTO.destination());
+    public SwissResponseDTO findConnections(String start, String destination) {
+        logger.info("Trying to find relation between {} and {}.", start, destination);
         String url = swissBaseUrl + "/connections?from={from}&to={to}";
 
         Map<String, String> uri = new HashMap<>();
-        uri.put("from", relationDTO.start());
-        uri.put("to", relationDTO.destination());
+        uri.put("from", start);
+        uri.put("to", destination);
 
         ConnectionDTO connections = restTemplate.getForObject(url, ConnectionDTO.class, uri);
         if (connections == null) {
-            logger.error("Unable to found connection for {} and {}", relationDTO.start(), relationDTO.destination());
+            logger.error("Unable to found connection for {} and {}", start, destination);
             throw new NotFoundException("Unable to found connection.");
         } else if (connections.connections().isEmpty()) {
-            logger.error("Unable to found relation between {} and {}", relationDTO.start(), relationDTO.destination());
+            logger.error("Unable to found relation between {} and {}", start, destination);
             throw new NotFoundException("Unable to found relation between provided locations.");
         }
 

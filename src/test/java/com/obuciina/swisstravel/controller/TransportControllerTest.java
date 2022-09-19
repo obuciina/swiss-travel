@@ -1,9 +1,6 @@
 package com.obuciina.swisstravel.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.obuciina.swisstravel.model.dto.RelationDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,13 +32,10 @@ public class TransportControllerTest {
     @Test
     void testGetDurationOk() throws Exception {
         //given
-        RelationDTO relationOne = new RelationDTO("Lausanne", "Genève");
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-        String request = objectWriter.writeValueAsString(relationOne);
+        String url = BASE_URL + "/Lausanne/Genève";
 
         //then
-        MvcResult result = mockMvc.perform(get(BASE_URL).contentType(APPLICATION_JSON_UTF8).content(request))
+        MvcResult result = mockMvc.perform(get(url).contentType(APPLICATION_JSON_UTF8))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -52,28 +46,22 @@ public class TransportControllerTest {
     @Test
     void testGetDurationBadRequest() throws Exception {
         //given
-        RelationDTO relationOne = new RelationDTO("Lausanne", "");
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-        String request = objectWriter.writeValueAsString(relationOne);
+        String url = BASE_URL + "/Lausanne/";
 
         //then
-        mockMvc.perform(get(BASE_URL).contentType(APPLICATION_JSON_UTF8).content(request))
+        mockMvc.perform(get(url).contentType(APPLICATION_JSON_UTF8))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
     void testGetDurationClientError() throws Exception {
         //given
-        RelationDTO relationOne = new RelationDTO("Lausanne", "");
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-        String request = objectWriter.writeValueAsString(relationOne);
+        String url = BASE_URL + "/Lausanne/Basel";
 
         //then
-        mockMvc.perform(get(BASE_URL+"error").contentType(APPLICATION_JSON_UTF8).content(request))
+        mockMvc.perform(get(url + "error").contentType(APPLICATION_JSON_UTF8))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 }

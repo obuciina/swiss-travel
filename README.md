@@ -28,3 +28,9 @@ Alternatively you can run all test using Maven:
 ```shell
 mvn clean test
 ```
+
+## Running docker container
+
+```shell
+docker run -p 8080:8080 swiss-travel
+```
