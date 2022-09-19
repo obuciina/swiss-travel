@@ -1,7 +1,6 @@
 package com.obuciina.swisstravel.controller;
 
 
-import com.obuciina.swisstravel.exception.NotFoundException;
 import com.obuciina.swisstravel.model.dto.RelationDTO;
 import com.obuciina.swisstravel.model.dto.SwissResponseDTO;
 import com.obuciina.swisstravel.service.TransportService;
@@ -44,11 +43,8 @@ public class TransportController {
     )
     @GetMapping("/connections")
     public ResponseEntity<?> getDuration(@RequestBody @Valid RelationDTO relationDTO) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(transportService.findConnections(relationDTO));
-        } catch (NotFoundException ex) {
-            logger.error("Unable to found relation between {} and {}.", relationDTO.start(), relationDTO.destination());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        logger.info("Start finding time duration between {} and {}", relationDTO.start(), relationDTO.destination());
+        return ResponseEntity.status(HttpStatus.OK).body(transportService.findConnections(relationDTO));
     }
+
 }
